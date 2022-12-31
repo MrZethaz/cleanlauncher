@@ -23,6 +23,7 @@ class _ApplicationListState extends State<ApplicationList> {
         includeSystemApps: true,
         onlyAppsWithLaunchIntent: true);
     appNames = allApps.map((e) => e.appName).toList();
+    applications = allApps;
     setState(() {
       state = ConnectionState.done;
     });
