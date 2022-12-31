@@ -24,6 +24,11 @@ class _ApplicationListState extends State<ApplicationList> {
         onlyAppsWithLaunchIntent: true);
     appNames = allApps.map((e) => e.appName).toList();
     applications = allApps;
+
+    for (Application application in allApps) {
+      precacheImage(
+          MemoryImage((application as ApplicationWithIcon).icon), context);
+    }
     setState(() {
       state = ConnectionState.done;
     });
@@ -43,6 +48,12 @@ class _ApplicationListState extends State<ApplicationList> {
     super.initState();
     _getApplications();
     applications = allApps;
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -128,6 +139,7 @@ class _ApplicationListState extends State<ApplicationList> {
   _getApplicationList() {
     return Expanded(
       child: ListView.separated(
+        primary: false,
         separatorBuilder: (context, index) {
           return Divider(
             color: Colors.white,
