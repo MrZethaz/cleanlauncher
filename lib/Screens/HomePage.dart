@@ -22,7 +22,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
 
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
     getBatteryPerentage();
   }
 
@@ -35,10 +40,9 @@ class _HomePageState extends State<HomePage> {
 
   updateTime() {
     Timer.periodic(Duration(seconds: 1), (Timer t) {
-      setState(() {
-        time = DateTime.now();
-      });
+      time = DateTime.now();
     });
+    setState(() {});
   }
 
   @override
