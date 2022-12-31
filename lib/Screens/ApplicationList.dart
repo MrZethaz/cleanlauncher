@@ -10,16 +10,19 @@ class ApplicationList extends StatefulWidget {
 
 class _ApplicationListState extends State<ApplicationList> {
   List<Application> applications = [];
+  List<Application> allApps = [];
+  List<String> appNames = [];
   ConnectionState state = ConnectionState.active;
 
   bool abc = true;
+  TextEditingController searchApp = TextEditingController();
 
   _getApplications() async {
-    applications = await DeviceApps.getInstalledApplications(
+    allApps = await DeviceApps.getInstalledApplications(
         includeAppIcons: true,
         includeSystemApps: true,
         onlyAppsWithLaunchIntent: true);
-
+    appNames = allApps.map((e) => e.appName).toList();
     setState(() {
       state = ConnectionState.done;
     });
@@ -38,6 +41,7 @@ class _ApplicationListState extends State<ApplicationList> {
     // TODO: implement initState
     super.initState();
     _getApplications();
+    applications = allApps;
   }
 
   @override
@@ -55,12 +59,48 @@ class _ApplicationListState extends State<ApplicationList> {
     );
   }
 
+  _onChangedSearchAppText(String change) {
+    String text = searchApp.text.toLowerCase();
+
+    if (text.length == 0) {
+      setState(() {
+        applications = allApps;
+      });
+    }
+    List<Application> tempApps = [];
+    for (String appName in appNames) {
+      String app = appName.toLowerCase();
+      if (app.contains(text)) {
+        int index = 0;
+        for (Application application in allApps) {
+          if (application.appName.toLowerCase() == app) {
+            break;
+          }
+          index++;
+        }
+        tempApps.add(allApps[index]);
+        print(app);
+      }
+    }
+    print(tempApps.length);
+    setState(() {
+      applications = tempApps;
+    });
+  }
+
   _getApplicationPageWhenLoadedApps() {
     return SafeArea(
-      child: Column(
+      child: ListView(
         children: [
           Row(children: [
-            Expanded(child: TextField()),
+            Expanded(
+                child: TextField(
+              controller: searchApp,
+              onChanged: _onChangedSearchAppText,
+              decoration: InputDecoration(
+                labelText: "Search app",
+              ),
+            )),
             IconButton(
                 onPressed: () {
                   setState(() {

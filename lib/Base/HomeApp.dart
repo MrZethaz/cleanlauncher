@@ -13,7 +13,9 @@ class _HomeAppState extends State<HomeApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Home(),
-      theme: ThemeData.dark().copyWith(colorScheme: ColorScheme.dark()),
+      theme: ThemeData.dark().copyWith(
+          colorScheme: ColorScheme.dark()
+              .copyWith(primary: Colors.white, secondary: Colors.white)),
     );
   }
 }
