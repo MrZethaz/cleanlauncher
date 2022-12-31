@@ -44,8 +44,15 @@ class _HomeState extends State<Home> {
                   itemCount: applications.length,
                   itemBuilder: (context, index) {
                     return ListTile(
+                      leading: Image.memory(
+                          (applications[index] as ApplicationWithIcon).icon,
+                          height: 40),
                       title: Text(
                         applications[index].appName,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      subtitle: Text(
+                        applications[index].packageName,
                         style: TextStyle(color: Colors.white),
                       ),
                     );
