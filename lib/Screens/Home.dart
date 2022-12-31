@@ -1,3 +1,4 @@
+import 'package:clean_launcher/Screens/ApplicationList.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: PageView(
-      children: [_getHomeScreen(), _getApplicationsScreen()],
+      children: [_getHomeScreen(), ApplicationList()],
     ));
   }
 
@@ -25,54 +26,5 @@ class _HomeState extends State<Home> {
             style: TextStyle(color: Colors.white, fontSize: 32),
           ),
         ),
-      );
-  _getApplicationsScreen() => Container(
-        color: Colors.black,
-        child: Column(children: [
-          Expanded(
-              child: FutureBuilder(
-            future: DeviceApps.getInstalledApplications(
-                includeAppIcons: true,
-                includeSystemApps: true,
-                onlyAppsWithLaunchIntent: true),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                List<Application> applications = snapshot.data!;
-                applications.sort(((a, b) => a.appName.compareTo(b.appName)));
-
-                return ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: applications.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {
-                        DeviceApps.openApp(applications[index].packageName);
-                      },
-                      onLongPress: () {
-                        DeviceApps.openAppSettings(
-                            applications[index].packageName);
-                      },
-                      leading: Image.memory(
-                          (applications[index] as ApplicationWithIcon).icon,
-                          height: 40),
-                      title: Text(
-                        applications[index].appName,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      subtitle: Text(
-                        applications[index].packageName,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  },
-                );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ))
-        ]),
       );
 }
