@@ -90,37 +90,49 @@ class _ApplicationListState extends State<ApplicationList> {
 
   _getApplicationPageWhenLoadedApps() {
     return SafeArea(
-      child: ListView(
-        children: [
-          Row(children: [
-            Expanded(
-                child: TextField(
-              controller: searchApp,
-              onChanged: _onChangedSearchAppText,
-              decoration: InputDecoration(
-                labelText: "Search app",
-              ),
-            )),
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    abc = !abc;
-                    _sortList();
-                  });
-                },
-                icon: Icon(
-                  Icons.sort_by_alpha,
-                ))
-          ]),
-          _getApplicationList()
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          children: [
+            Row(children: [
+              Expanded(
+                  child: TextField(
+                controller: searchApp,
+                onChanged: _onChangedSearchAppText,
+                decoration: InputDecoration(
+                  labelText: "Search app",
+                ),
+              )),
+              IconButton(
+                  onPressed: () {
+                    setState(() {
+                      abc = !abc;
+                      _sortList();
+                    });
+                  },
+                  icon: Icon(
+                    Icons.sort_by_alpha,
+                  ))
+            ]),
+            SizedBox(
+              height: 8,
+            ),
+            _getApplicationList()
+          ],
+        ),
       ),
     );
   }
 
   _getApplicationList() {
     return Expanded(
-      child: ListView.builder(
+      child: ListView.separated(
+        separatorBuilder: (context, index) {
+          return Divider(
+            color: Colors.white,
+            thickness: 0.15,
+          );
+        },
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
         itemCount: applications.length,
