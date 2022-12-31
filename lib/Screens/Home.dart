@@ -38,12 +38,14 @@ class _HomeState extends State<Home> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 List<Application> applications = snapshot.data!;
+                applications.sort(((a, b) => a.appName.compareTo(b.appName)));
+
                 return ListView.builder(
                   itemCount: applications.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(
-                        "Application ${index.toString()}",
+                        applications[index].appName,
                         style: TextStyle(color: Colors.white),
                       ),
                     );
