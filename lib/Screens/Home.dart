@@ -41,9 +41,17 @@ class _HomeState extends State<Home> {
                 applications.sort(((a, b) => a.appName.compareTo(b.appName)));
 
                 return ListView.builder(
+                  physics: BouncingScrollPhysics(),
                   itemCount: applications.length,
                   itemBuilder: (context, index) {
                     return ListTile(
+                      onTap: () {
+                        DeviceApps.openApp(applications[index].packageName);
+                      },
+                      onLongPress: () {
+                        DeviceApps.openAppSettings(
+                            applications[index].packageName);
+                      },
                       leading: Image.memory(
                           (applications[index] as ApplicationWithIcon).icon,
                           height: 40),
