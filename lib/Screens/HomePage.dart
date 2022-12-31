@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   var battery = Battery();
 
   int percentage = 0;
+  String cumprimento = "Bom dia Apollo!";
 
   @override
   void initState() {
@@ -40,9 +41,21 @@ class _HomePageState extends State<HomePage> {
 
   updateTime() {
     Timer.periodic(Duration(seconds: 1), (Timer t) {
-      time = DateTime.now();
+      setState(() {
+        time = DateTime.now();
+        if (time.hour < 6) {
+          cumprimento = "Boa madrugada Apollo!";
+        } else if (time.hour < 12) {
+          cumprimento = "Bom dia Apollo!";
+        } else if (time.hour < 18) {
+          cumprimento = "Boa tarde Apollo!";
+        } else if (time.hour < 24) {
+          cumprimento = "Boa noite Apollo!";
+        } else {
+          cumprimento = "Bom dia Apollo!";
+        }
+      });
     });
-    setState(() {});
   }
 
   @override
@@ -87,6 +100,14 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(
             height: 64,
+          ),
+          Text(
+            "${cumprimento}",
+            style: GoogleFonts.montserrat(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
           ),
           Expanded(child: Container()),
         ]),

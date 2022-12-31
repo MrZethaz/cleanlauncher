@@ -156,6 +156,16 @@ class _ApplicationListState extends State<ApplicationList> {
               IconButton(
                   onPressed: () {
                     setState(() {
+                      searchApp.clear();
+                      _onChangedSearchAppText("");
+                    });
+                  },
+                  icon: Icon(
+                    Icons.clear,
+                  )),
+              IconButton(
+                  onPressed: () {
+                    setState(() {
                       abc = !abc;
                       _sortList();
                     });
