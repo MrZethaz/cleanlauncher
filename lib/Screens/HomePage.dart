@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:battery_plus/battery_plus.dart';
 import 'package:clean_launcher/Screens/NotesList.dart';
+import 'package:clean_launcher/Screens/TaskList.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
               "Notes",
               style: GoogleFonts.montserrat(
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 fontSize: 24,
               ),
             ),
@@ -126,6 +127,26 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
                   return NotesList();
+                },
+              ));
+            },
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          GestureDetector(
+            child: Text(
+              "Daily tasks",
+              style: GoogleFonts.montserrat(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
+              ),
+            ),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return TaskList();
                 },
               ));
             },
