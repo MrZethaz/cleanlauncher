@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApplicationsManager {
@@ -14,13 +17,19 @@ class ApplicationsManager {
   }
 
   _getSharedPreferencesApplications() async {
-    sh = await SharedPreferences.getInstance();
-    List<String>? _applications = sh.getStringList("applications");
-    print("applications ${_applications}");
-    if (_applications != null && _applications.length > 0) {
-      List<Map<String, dynamic>> applicationsMap = _applications
-          .map((e) => jsonDecode(e) as Map<String, dynamic>)
-          .toList();
+    //sh = await SharedPreferences.getInstance();
+
+    Directory path = await getApplicationSupportDirectory();
+
+    File? _applications =
+        await File.fromUri(Uri.file("${path.path}/applications.xml"));
+
+    if (await _applications.exists()) {
+      List<dynamic> applicationsString =
+          jsonDecode(_applications.readAsStringSync());
+      List<dynamic> applicationsMap =
+          applicationsString.map((e) => jsonDecode(e)).toList();
+
       List<AppInfo> shApplications = applicationsMap.map((e) {
         e["icon"] = base64Decode(e["icon"]);
 
@@ -36,24 +45,34 @@ class ApplicationsManager {
 
       allApps = shApplications;
     } else {
-      allApps = await _getApplications();
+      print("daub");
+
+      _getApplications();
     }
   }
 
-  Future<List<AppInfo>> _getApplications() async {
+  _getApplications() async {
+    allApps = await InstalledApps.getInstalledApps(true, true);
     _saveApplicationsToSharedPreferences();
-
-    return allApps = await InstalledApps.getInstalledApps(true, true);
   }
 
-  _saveApplicationsToSharedPreferences() {
+  _saveApplicationsToSharedPreferences() async {
+    Directory path = await getApplicationSupportDirectory();
+
+    File? _applications =
+        File.fromUri(Uri.file("${path.path}/applications.xml"));
+
+    if (!_applications.existsSync()) {
+      await _applications.create(recursive: true);
+    }
+
     List<Map<String, dynamic>> applicationsMap =
         allApps.map((e) => e.toMap()).toList();
-    List<String> applicationsString =
-        applicationsMap.map((e) => jsonEncode(e)).toList();
 
-    sh
-        .setStringList("applications", applicationsString)
-        .then((value) => print("Saved"));
+    List<String> jsonListString =
+        applicationsMap.map((e) => jsonEncode(e)).toList();
+    String applicationsString = jsonEncode(jsonListString);
+
+    _applications.writeAsString(applicationsString);
   }
 }
