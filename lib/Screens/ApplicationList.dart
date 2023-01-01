@@ -1,3 +1,4 @@
+import 'package:clean_launcher/Screens/Home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:installed_apps/app_info.dart';
@@ -15,60 +16,28 @@ class ApplicationList extends StatefulWidget {
 
 class _ApplicationListState extends State<ApplicationList> {
   List<AppInfo> applications = [];
-  List<AppInfo> allApps = [];
+  //List<AppInfo> allApps = [];
   List<String> appNames = [];
-  ConnectionState state = ConnectionState.active;
+  ConnectionState state = ConnectionState.done;
 
   bool abc = true;
   TextEditingController searchApp = TextEditingController();
 
   late SharedPreferences sh;
 
-  _getSharedPreferencesApplications() async {
-    sh = await SharedPreferences.getInstance();
-    List<String>? _applications = sh.getStringList("applications");
-    print(applications.toString());
-    if (_applications != null && _applications.length > 0) {
-      print("a");
-      List<Map<String, dynamic>> applicationsMap = _applications
-          .map((e) => jsonDecode(e) as Map<String, dynamic>)
-          .toList();
-      List<AppInfo> shApplications = applicationsMap.map((e) {
-        e["icon"] =
-            (Uint8List.fromList((e["icon"] as String).codeUnits) as Uint8List)
-                .toString();
-
-        AppInfo appInfo = AppInfo(
-          e["name"],
-          Uint8List.fromList((e["icon"] as String).codeUnits),
-          e["package_name"],
-          e["version_name"],
-          e["version_code"],
-        );
-        return appInfo;
-      }).toList();
-      setState(() {
-        allApps = shApplications;
-        state = ConnectionState.done;
-      });
-    }
-    _getApplications();
+  _getApps() {
+    setState(() {
+      appNames = allApps.map((e) => e.name!).toList();
+      applications = allApps;
+    });
   }
 
-  _getApplications() async {
-    print("async");
-    allApps = await InstalledApps.getInstalledApps(true, true);
-    appNames = allApps.map((e) => e.name!).toList();
-    applications = allApps;
-
-    for (AppInfo application in allApps) {
-      precacheImage(MemoryImage(application.icon!), context);
-    }
+  _getSharedPreferencesApplications() async {
     setState(() {
+      //allApps = shApps;
       state = ConnectionState.done;
     });
-
-    _saveApplicationsToSharedPreferences();
+    //_getApplications();
   }
 
   _sortList() {
@@ -83,9 +52,8 @@ class _ApplicationListState extends State<ApplicationList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getSharedPreferencesApplications();
-
     applications = allApps;
+    //_getSharedPreferencesApplications();
   }
 
   @override
@@ -220,16 +188,6 @@ class _ApplicationListState extends State<ApplicationList> {
     );
   }
 
-  _saveApplicationsToSharedPreferences() {
-    List<Map<String, dynamic>> applicationsMap =
-        applications.map((e) => e.toMap()).toList();
-    List<String> applicationsString =
-        applicationsMap.map((e) => jsonEncode(e)).toList();
-
-    sh
-        .setStringList("applications", applicationsString)
-        .then((value) => print("Saved"));
-  }
   /*
 
   Application appfromMap(Map<String, dynamic> map) {
