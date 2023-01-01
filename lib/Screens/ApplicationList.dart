@@ -1,3 +1,4 @@
+import 'package:clean_launcher/Base/ApplicationsManager.dart';
 import 'package:clean_launcher/Screens/Home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,28 +17,17 @@ class ApplicationList extends StatefulWidget {
 
 class _ApplicationListState extends State<ApplicationList> {
   List<AppInfo> applications = [];
-  //List<AppInfo> allApps = [];
   List<String> appNames = [];
   ConnectionState state = ConnectionState.done;
 
   bool abc = true;
   TextEditingController searchApp = TextEditingController();
 
-  late SharedPreferences sh;
-
   _getApps() {
     setState(() {
-      appNames = allApps.map((e) => e.name!).toList();
-      applications = allApps;
+      appNames = ApplicationsManager.allApps.map((e) => e.name!).toList();
+      applications = ApplicationsManager.allApps;
     });
-  }
-
-  _getSharedPreferencesApplications() async {
-    setState(() {
-      //allApps = shApps;
-      state = ConnectionState.done;
-    });
-    //_getApplications();
   }
 
   _sortList() {
@@ -52,8 +42,7 @@ class _ApplicationListState extends State<ApplicationList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    applications = allApps;
-    //_getSharedPreferencesApplications();
+    _getApps();
   }
 
   @override
@@ -64,9 +53,7 @@ class _ApplicationListState extends State<ApplicationList> {
 
   @override
   Widget build(BuildContext context) {
-    //applications.sort(((a, b) => a.appName.compareTo(b.appName)));
     _sortList();
-
     return Container(
       color: Colors.black,
       child: state == ConnectionState.done
@@ -82,7 +69,7 @@ class _ApplicationListState extends State<ApplicationList> {
 
     if (text.length == 0) {
       setState(() {
-        applications = allApps;
+        applications = ApplicationsManager.allApps;
       });
     }
     List<AppInfo> tempApps = [];
@@ -90,17 +77,15 @@ class _ApplicationListState extends State<ApplicationList> {
       String app = appName.toLowerCase();
       if (app.contains(text)) {
         int index = 0;
-        for (AppInfo application in allApps) {
+        for (AppInfo application in ApplicationsManager.allApps) {
           if (application.name!.toLowerCase() == app) {
             break;
           }
           index++;
         }
-        tempApps.add(allApps[index]);
-        print(app);
+        tempApps.add(ApplicationsManager.allApps[index]);
       }
     }
-    print(tempApps.length);
     setState(() {
       applications = tempApps;
     });
@@ -187,84 +172,4 @@ class _ApplicationListState extends State<ApplicationList> {
       ),
     );
   }
-
-  /*
-
-  Application appfromMap(Map<String, dynamic> map) {
-    return Application(
-        appName: map["app_name"],
-        apkFilePath: map["apk_file_path"],
-        versionName: map["version_name"],
-        versionCode: map["version_code"],
-        dataDir: map["data_dir"],
-        systemApp: map["system_app"],
-        installTimeMillis: map["install_time"],
-        updateTimeMillis: map["update_time"],
-        enabled: map["is_enabled"],
-        category: _parseCategory(map["category"]));
-  }
-
-  ApplicationCategory _parseCategory(Object? category) {
-    if (category is num && category < 0) {
-      return ApplicationCategory.undefined;
-    } else if (category == 0) {
-      return ApplicationCategory.game;
-    } else if (category == 1) {
-      return ApplicationCategory.audio;
-    } else if (category == 2) {
-      return ApplicationCategory.video;
-    } else if (category == 3) {
-      return ApplicationCategory.image;
-    } else if (category == 4) {
-      return ApplicationCategory.social;
-    } else if (category == 5) {
-      return ApplicationCategory.news;
-    } else if (category == 6) {
-      return ApplicationCategory.maps;
-    } else if (category == 7) {
-      return ApplicationCategory.productivity;
-    } else {
-      return ApplicationCategory.undefined;
-    }
-  }
-
-  Map<String, dynamic> appToMap(Application a) {
-    return {
-      "app_name": a.appName,
-      "apk_file_path": a.apkFilePath,
-      "version_name": a.versionName,
-      "version_code": a.versionCode,
-      "data_dir": a.dataDir,
-      "system_app": a.systemApp,
-      "install_time": a.installTimeMillis,
-      "update_time": a.updateTimeMillis,
-      "is_enabled": a.enabled,
-      "category": categoryToInt(a.category)
-    };
-  }
-
-  int categoryToInt(ApplicationCategory category) {
-    if (category == ApplicationCategory.undefined) {
-      return -1;
-    } else if (category == ApplicationCategory.game) {
-      return 0;
-    } else if (category == ApplicationCategory.audio) {
-      return 1;
-    } else if (category == ApplicationCategory.video) {
-      return 2;
-    } else if (category == ApplicationCategory.image) {
-      return 3;
-    } else if (category == ApplicationCategory.social) {
-      return 4;
-    } else if (category == ApplicationCategory.news) {
-      return 5;
-    } else if (category == ApplicationCategory.maps) {
-      return 6;
-    } else if (category == ApplicationCategory.productivity) {
-      return 7;
-    } else {
-      return -1;
-    }
-  }
-   */
 }

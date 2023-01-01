@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(child: Container()),
           Text(
-            "${DateTime.now().hour}:${formatter.format(DateTime.now().minute)}:${formatter.format(DateTime.now().second)}",
+            "${formatter.format(DateTime.now().hour)}:${formatter.format(DateTime.now().minute)}:${formatter.format(DateTime.now().second)}",
             style: GoogleFonts.montserrat(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Text(
-            "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+            "${formatter.format(DateTime.now().day)}/${formatter.format(DateTime.now().month)}/${DateTime.now().year}",
             style: GoogleFonts.montserrat(
               color: Colors.white,
               fontWeight: FontWeight.w700,
