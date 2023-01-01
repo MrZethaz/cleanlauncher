@@ -7,7 +7,6 @@ import 'dart:convert';
 
 class NotesManager {
   late SharedPreferences sh;
-  late EncryptedSharedPreferences esh;
 
   List<NotesBase> allNotes = [];
 
@@ -15,29 +14,19 @@ class NotesManager {
     await _initSharedPreferences();
   }
 
+  bool checkNotes() {
+    return sh.containsKey("notes");
+  }
+
   _initSharedPreferences() async {
     sh = await SharedPreferences.getInstance();
-    esh = EncryptedSharedPreferences(
-        mode: AESMode.ofb64Gctr,
-        prefs: sh,
-        randomKeyKey:
-            r"5BzvNj9WqZNk5H7@Ikw!IwGs#KBzZ7!WY@8bHbcPd38n8JC8T(pf@tt(CCf%8W7J",
-        randomKeyListKey:
-            r"GB^Nr(VDDu5*9qqGNnIUDX*xFTtHyyTZjEhLxZ%G9$wqmEf3g@Rk&cRxEsxhH3tH");
   }
 
   Future<bool> getSharedPreferencesNotes() async {
-    String? notesJson = await esh.getString("notes");
+    List<String>? notesJson = sh.getStringList("notes");
 
     if (notesJson != null) {
-      List<String> notesString =
-          (jsonDecode(notesJson) as List).map((e) => e.toString()).toList();
-      print(notesString);
-      allNotes = notesString
-          .map(
-              (e) => NotesBase.fromJson(String.fromCharCodes(base64.decode(e))))
-          .toList();
-      print(allNotes.toString());
+      allNotes = notesJson.map((e) => NotesBase.fromJson(e)).toList();
 
       return true;
     } else {
@@ -46,9 +35,7 @@ class NotesManager {
   }
 
   saveNotes({required List<NotesBase> notestosave}) async {
-    List<String> notesJsonList =
-        allNotes.map((e) => base64.encode(e.toJson().codeUnits)).toList();
-    String notesJson = json.encode(notesJsonList);
-    await esh.setString("notes", notesJson);
+    List<String> notesJsonList = allNotes.map((e) => e.toJson()).toList();
+    await sh.setStringList("notes", notesJsonList);
   }
 }

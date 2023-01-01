@@ -3,6 +3,7 @@ import 'package:clean_launcher/Base/NotesManager.dart';
 import 'package:clean_launcher/Screens/NoteEdit.dart';
 import 'package:clean_launcher/Screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class NotesList extends StatefulWidget {
@@ -36,21 +37,26 @@ class _NotesListState extends State<NotesList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [_getAddNote()],
-      ),
-      body: loading
-          ? SplashScreen()
-          : ListView.separated(
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return _dismissible(index);
-              },
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
-              itemCount: notesManager.allNotes.length),
-    );
+        appBar: AppBar(
+          actions: [_getAddNote()],
+        ),
+        body: loading
+            ? SplashScreen()
+            : localNotes.length == 0
+                ? Center(
+                    child: Text("Nenhuma nota ainda",
+                        style: GoogleFonts.montserrat(
+                            fontSize: 24, fontWeight: FontWeight.w700)),
+                  )
+                : ListView.separated(
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return _dismissible(index);
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider();
+                    },
+                    itemCount: localNotes.length));
   }
 
   _getAddNote() {

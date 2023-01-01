@@ -45,8 +45,11 @@ class _NoteEditState extends State<NoteEdit> {
 
   _getContentTextField() {
     return TextField(
-      decoration:
-          InputDecoration(border: InputBorder.none, labelText: "Content"),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        labelText: "Content",
+      ),
+      maxLines: 9999999999999,
       controller: _contentEditingController,
     );
   }
