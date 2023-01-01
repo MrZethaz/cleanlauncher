@@ -1,5 +1,6 @@
 import 'package:clean_launcher/Base/TaskBase.dart';
 import 'package:clean_launcher/Base/TaskManager.dart';
+import 'package:clean_launcher/Screens/HomePage.dart';
 import 'package:clean_launcher/Screens/NoteEdit.dart';
 import 'package:clean_launcher/Screens/SplashScreen.dart';
 import 'package:clean_launcher/Screens/TaskEdit.dart';
@@ -15,14 +16,10 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  TaskManager tasksManager = TaskManager();
   List<TaskBase> localTasks = [];
   bool loading = true;
 
-  _getTasksManager() async {
-    await tasksManager.start();
-    await tasksManager.getSharedPreferencesTasks();
-    print(localTasks);
+  _getTasksManager() {
     setState(() {
       localTasks = tasksManager.allTasks;
       loading = false;
@@ -44,27 +41,40 @@ class _TaskListState extends State<TaskList> {
       return atimestamp.compareTo(btimestamp);
     });
 
-    return Scaffold(
-        appBar: AppBar(
-          actions: [_getAddTask()],
-        ),
-        body: loading
-            ? SplashScreen()
-            : localTasks.length == 0
-                ? Center(
-                    child: Text("Nenhuma nota ainda",
-                        style: GoogleFonts.montserrat(
-                            fontSize: 24, fontWeight: FontWeight.w700)),
-                  )
-                : ListView.separated(
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return _dismissible(index);
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                    itemCount: localTasks.length));
+    return WillPopScope(
+      onWillPop: () {
+        print(
+            'Backbutton pressed (device or appbar button), do whatever you want.');
+
+        //trigger leaving and use own data
+        Navigator.pop(context, localTasks);
+
+        //we need to return a future
+        return Future.value(false);
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            actions: [_getAddTask()],
+          ),
+          body: loading
+              ? SplashScreen()
+              : localTasks.length == 0
+                  ? Center(
+                      child: Text("Nenhuma nota ainda",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 24, fontWeight: FontWeight.w700)),
+                    )
+                  : ListView.separated(
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return _dismissible(index);
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider();
+                      },
+                      itemCount: localTasks.length)),
+    );
+    ;
   }
 
   _getAddTask() {
