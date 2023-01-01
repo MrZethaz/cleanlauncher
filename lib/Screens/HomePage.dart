@@ -61,6 +61,11 @@ class _HomePageState extends State<HomePage> {
         });
       }
     }
+    if (localTasks.isEmpty) {
+      setState(() {
+        nextTask = null;
+      });
+    }
   }
 
   @override

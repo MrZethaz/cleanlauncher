@@ -38,30 +38,32 @@ class _TasksEditState extends State<TasksEdit> {
 
   _getTitleTextField() {
     return TextField(
-      decoration: InputDecoration(border: InputBorder.none, labelText: "Title"),
+      decoration: InputDecoration(border: InputBorder.none, hintText: "Título"),
       controller: _titleEditingController,
     );
   }
 
   _getContentTextField() {
-    return InkWell(
-      onTap: () async {
-        TimeOfDay? timePicked =
-            await showTimePicker(context: context, initialTime: time);
-        if (timePicked != null) {
-          setState(() {
-            time = timePicked;
-          });
-        }
-      },
-      child: Ink(
-        padding: EdgeInsets.all(8),
-        child: Text(
-          "Horário: ${this.time.hour}:${this.time.minute}",
-          style: GoogleFonts.montserrat(fontSize: 18, color: Colors.black),
+    return Center(
+      child: InkWell(
+        onTap: () async {
+          TimeOfDay? timePicked =
+              await showTimePicker(context: context, initialTime: time);
+          if (timePicked != null) {
+            setState(() {
+              time = timePicked;
+            });
+          }
+        },
+        child: Ink(
+          padding: EdgeInsets.all(8),
+          child: Text(
+            "Horário: ${this.time.hour}:${this.time.minute}",
+            style: GoogleFonts.montserrat(fontSize: 24, color: Colors.black),
+          ),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(32)),
         ),
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(32)),
       ),
     );
   }
