@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:battery_plus/battery_plus.dart';
+import 'package:clean_launcher/Screens/NotesList.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -108,6 +109,26 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
+          ),
+          SizedBox(
+            height: 36,
+          ),
+          GestureDetector(
+            child: Text(
+              "Notes",
+              style: GoogleFonts.montserrat(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return NotesList();
+                },
+              ));
+            },
           ),
           Expanded(child: Container()),
         ]),
