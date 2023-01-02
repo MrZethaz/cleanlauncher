@@ -56,13 +56,14 @@ class _TasksEditState extends State<TasksEdit> {
           }
         },
         child: Ink(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(24),
           child: Text(
             "Horário: ${this.time.hour}:${this.time.minute}",
-            style: GoogleFonts.montserrat(fontSize: 24, color: Colors.black),
+            style: GoogleFonts.montserrat(
+                fontSize: 28, color: Colors.black, fontWeight: FontWeight.bold),
           ),
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(32)),
+              color: Colors.white, borderRadius: BorderRadius.circular(100)),
         ),
       ),
     );
