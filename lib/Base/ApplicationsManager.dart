@@ -24,9 +24,11 @@ class ApplicationsManager {
     File? _applications =
         await File.fromUri(Uri.file("${path.path}/applications.xml"));
 
-    if (await _applications.exists()) {
+    if (_applications.existsSync() &&
+        _applications.readAsStringSync().isNotEmpty) {
       List<dynamic> applicationsString =
           jsonDecode(_applications.readAsStringSync());
+
       List<dynamic> applicationsMap =
           applicationsString.map((e) => jsonDecode(e)).toList();
 
@@ -57,7 +59,7 @@ class ApplicationsManager {
     return allApps;
   }
 
-  saveApplicationsToSharedPreferences() async {
+  Future<void> saveApplicationsToSharedPreferences() async {
     Directory path = await getApplicationSupportDirectory();
 
     File? _applications =

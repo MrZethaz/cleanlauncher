@@ -22,12 +22,25 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool loading = true;
+  late SharedPreferences sh;
+  PageController pageController = PageController(initialPage: 0);
+  int startIndex = 0;
 
   _getApplications() async {
+    sh = await SharedPreferences.getInstance();
     await applicationsManager.start();
+    int? start = sh.getInt("startIndex");
+    if (start != null) {
+      print(start);
+      setState(() {
+        startIndex = start;
+      });
+      //sh.setInt("startIndex", 0);
+    }
     setState(() {
       loading = false;
     });
+    _animateToPage();
   }
 
   @override
@@ -37,14 +50,25 @@ class _HomeState extends State<Home> {
     _getApplications();
   }
 
+  _animateToPage() {
+    if (loading == false) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => pageController.jumpToPage(startIndex));
+      sh.setInt("startIndex", 0);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     applicationsManager.getApplications();
+    _animateToPage();
+
     return Scaffold(
         backgroundColor: Colors.black,
         body: loading
             ? SplashScreen()
             : PageView(
+                controller: pageController,
                 children: [HomePage(), ApplicationList()],
               ));
   }

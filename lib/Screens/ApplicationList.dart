@@ -157,23 +157,37 @@ class _ApplicationListState extends State<ApplicationList> {
             ApplicationsManager.allApps.addAll(temporaryApps);
 
             if (temporaryApps.isNotEmpty) {
-              applicationsManager.saveApplicationsToSharedPreferences();
-              Restart.restartApp();
+              SharedPreferences.getInstance().then((value) async {
+                value.setInt("startIndex", 1);
+                print("saving");
+                await applicationsManager.saveApplicationsToSharedPreferences();
+                print("saved");
+                Restart.restartApp();
+              });
             }
           } else {
             for (String package in temporaryPackages) {
               int index = 0;
               bool found = false;
-              for (AppInfo app in ApplicationsManager.allApps) {
+              int i = 0;
+              while (i < ApplicationsManager.allApps.length) {
+                AppInfo app = ApplicationsManager.allApps[i];
                 if (app.packageName == package) {
-                  index++;
-                  found = true;
+                  break;
                 }
+                i++;
               }
-              if (found) ApplicationsManager.allApps.removeAt(index);
+              ApplicationsManager.allApps.removeAt(i);
+              print(ApplicationsManager.allApps[i].name);
             }
-            applicationsManager.saveApplicationsToSharedPreferences();
-            Restart.restartApp();
+            SharedPreferences.getInstance().then((value) async {
+              value.setInt("startIndex", 1);
+              print("saving");
+              await applicationsManager.saveApplicationsToSharedPreferences();
+              print("saved");
+
+              Restart.restartApp();
+            });
           }
         }
 
