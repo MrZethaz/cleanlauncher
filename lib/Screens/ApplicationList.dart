@@ -1,12 +1,17 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:clean_launcher/Base/ApplicationsManager.dart';
 import 'package:clean_launcher/Screens/Home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
+import 'package:restart_app/restart_app.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:watcher/watcher.dart';
 
 class ApplicationList extends StatefulWidget {
   const ApplicationList({super.key});
@@ -49,6 +54,7 @@ class _ApplicationListState extends State<ApplicationList> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    _checkAppList();
   }
 
   @override
@@ -91,6 +97,99 @@ class _ApplicationListState extends State<ApplicationList> {
     });
   }
 
+  _checkAppList() {
+    Timer.periodic(
+      Duration(seconds: 5),
+      (timer) async {
+        List<AppInfo> appinfo = await InstalledApps.getInstalledApps();
+        List<String?> appPackageNames =
+            appinfo.map((e) => e.packageName).toList();
+        List<String?> allAppsPackageNames =
+            ApplicationsManager.allApps.map((e) => e.packageName).toList();
+
+        bool appListChanged = false;
+        int i = 0;
+
+        if (appinfo.length != ApplicationsManager.allApps.length) {
+          appListChanged = true;
+        }
+        if (!appListChanged) {
+          for (AppInfo app in appinfo) {
+            bool tempAppChange = true;
+            for (AppInfo app2 in ApplicationsManager.allApps) {
+              if (app2.packageName == app.packageName) {
+                tempAppChange = false;
+              }
+            }
+            if (tempAppChange) {
+              i++;
+            }
+          }
+          appListChanged = i > 0;
+        }
+
+        print("here2");
+
+        print(appListChanged);
+
+        if (appListChanged) {
+          bool addedApp = appPackageNames.length > allAppsPackageNames.length;
+
+          List<String> temporaryPackages = [];
+          for (String? package
+              in addedApp ? appPackageNames : allAppsPackageNames) {
+            if (addedApp) {
+              if (!allAppsPackageNames.contains(package))
+                temporaryPackages.add(package!);
+            } else {
+              if (!appPackageNames.contains(package))
+                temporaryPackages.add(package!);
+            }
+          }
+
+          if (addedApp) {
+            List<AppInfo> temporaryApps = [];
+
+            for (String package in temporaryPackages) {
+              temporaryApps.add(await InstalledApps.getAppInfo(package));
+            }
+
+            ApplicationsManager.allApps.addAll(temporaryApps);
+
+            if (temporaryApps.isNotEmpty) {
+              applicationsManager.saveApplicationsToSharedPreferences();
+              Restart.restartApp();
+            }
+          } else {
+            for (String package in temporaryPackages) {
+              int index = 0;
+              bool found = false;
+              for (AppInfo app in ApplicationsManager.allApps) {
+                if (app.packageName == package) {
+                  index++;
+                  found = true;
+                }
+              }
+              if (found) ApplicationsManager.allApps.removeAt(index);
+            }
+            applicationsManager.saveApplicationsToSharedPreferences();
+            Restart.restartApp();
+          }
+        }
+
+        // applications = await applicationsManager.getApplications();
+        // setState(() {
+        //   state = ConnectionState.active;
+        //   sleep(Duration(milliseconds: 200));
+        //   state = ConnectionState.done;
+        //   applications = ApplicationsManager.allApps;
+        //   _onChangedSearchAppText(searchApp.text);
+        //   _sortList();
+        // });
+      },
+    );
+  }
+
   _getApplicationPageWhenLoadedApps() {
     return SafeArea(
       child: Padding(
@@ -125,6 +224,21 @@ class _ApplicationListState extends State<ApplicationList> {
                   },
                   icon: Icon(
                     Icons.sort_by_alpha,
+                  )),
+              IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      state = ConnectionState.active;
+                    });
+                    applications = await applicationsManager.getApplications();
+                    setState(() {
+                      _onChangedSearchAppText(searchApp.text);
+                      _sortList();
+                      state = ConnectionState.done;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.replay_outlined,
                   ))
             ]),
             SizedBox(

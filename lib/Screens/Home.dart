@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:watcher/watcher.dart';
+
+ApplicationsManager applicationsManager = ApplicationsManager();
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,7 +22,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool loading = true;
-  ApplicationsManager applicationsManager = ApplicationsManager();
 
   _getApplications() async {
     await applicationsManager.start();
@@ -37,6 +39,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    applicationsManager.getApplications();
     return Scaffold(
         backgroundColor: Colors.black,
         body: loading

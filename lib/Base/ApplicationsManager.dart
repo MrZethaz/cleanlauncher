@@ -47,16 +47,17 @@ class ApplicationsManager {
     } else {
       print("daub");
 
-      _getApplications();
+      getApplications();
     }
   }
 
-  _getApplications() async {
+  Future<List<AppInfo>> getApplications() async {
     allApps = await InstalledApps.getInstalledApps(true, true);
-    _saveApplicationsToSharedPreferences();
+    saveApplicationsToSharedPreferences();
+    return allApps;
   }
 
-  _saveApplicationsToSharedPreferences() async {
+  saveApplicationsToSharedPreferences() async {
     Directory path = await getApplicationSupportDirectory();
 
     File? _applications =
