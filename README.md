@@ -14,8 +14,8 @@ Um simples launcher para android, leve e direto ao ponto. Feito para pessoas com
 
 | Cor               | Hexadecimal                                                |
 | ----------------- | ---------------------------------------------------------------- |
-| Cor de background     | ![#000000](https://via.placeholder.com/10/000000?text=+) '#000000' |
-| Cor de primaria (textos, butões, etc) | ![#FFFFFF](https://via.placeholder.com/10/FFFFFF?text=+) '#FFFFFF'|
+| Cor de background     | ![#000000](https://placehold.co/15x15/000000/000000.png) '#000000' |
+| Cor de primaria (textos, butões, etc) | ![#FFFFFF](https://placehold.co/15x15/FFFFFF/FFFFFF.png) '#FFFFFF'|
 
 ## Screenshots
 #### Página inicial do app
