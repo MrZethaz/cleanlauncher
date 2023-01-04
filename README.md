@@ -14,15 +14,15 @@ Um simples launcher para android, leve e direto ao ponto. Feito para pessoas com
 
 | Cor               | Hexadecimal                                                |
 | ----------------- | ---------------------------------------------------------------- |
-| Cor de background     | ![#000000](https://via.placeholder.com/10/000000?text=+) #000000 |
-| Cor de primaria (textos, butões, etc) | ![#FFFFFF](https://via.placeholder.com/10/FFFFFF?text=+) #FFFFFF |
+| Cor de background     | ![#000000](https://via.placeholder.com/10/000000?text=+)|
+| Cor de primaria (textos, butões, etc) | ![#FFFFFF](https://via.placeholder.com/10/FFFFFF?text=+)|
 
 ## Screenshots
 #### Página inicial do app
-<img src="resources/print1.png" height=622 width=350>
+<img src="resources/print1.jpg" height=311 width=175>
 
 #### Página de applicativos
-<img src="resources/print2.png" height=622 width=350>
+<img src="resources/print2.jpg" height=311 width=175>
 
 
 
