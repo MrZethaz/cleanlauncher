@@ -14,8 +14,8 @@ Um simples launcher para android, leve e direto ao ponto. Feito para pessoas com
 
 | Cor               | Hexadecimal                                                |
 | ----------------- | ---------------------------------------------------------------- |
-| Cor de background     | ![#000000](https://via.placeholder.com/10/000000?text=+)|
-| Cor de primaria (textos, butões, etc) | ![#FFFFFF](https://via.placeholder.com/10/FFFFFF?text=+)|
+| Cor de background     | ![#000000](https://via.placeholder.com/10/000000?text=+) '#000000' |
+| Cor de primaria (textos, butões, etc) | ![#FFFFFF](https://via.placeholder.com/10/FFFFFF?text=+) '#FFFFFF'|
 
 ## Screenshots
 #### Página inicial do app
@@ -28,7 +28,7 @@ Um simples launcher para android, leve e direto ao ponto. Feito para pessoas com
 
 ## Instalação
 
-Baixe o Clean Launcher por meio da área de [release](https://github.com/MrZethaz/cleanlauncher/release) do projeto de acordo com sua arquitetura;
+Baixe o Clean Launcher por meio da área de [release](https://github.com/MrZethaz/cleanlauncher/releases) do projeto de acordo com sua arquitetura;
 Atualmente o app está compilado para as seguintes arquiteturas do android:
 - Arm
 - Arm64
