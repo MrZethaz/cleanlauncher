@@ -32,6 +32,8 @@ class _HomePageState extends State<HomePage> {
   TaskBase? nextTask;
 
   String firstMotivationalMessage = "";
+
+  var timer;
   _getTasks() async {
     await tasksManager.start();
     await tasksManager.getSharedPreferencesTasks();
@@ -82,6 +84,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
@@ -117,7 +125,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   updateNextTask() {
-    Timer.periodic(Duration(seconds: 5), (timer) {
+    timer = Timer.periodic(Duration(seconds: 5), (timer) {
       _getNextTask();
     });
   }

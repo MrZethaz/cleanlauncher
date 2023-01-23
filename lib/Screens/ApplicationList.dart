@@ -23,15 +23,16 @@ class ApplicationList extends StatefulWidget {
 class _ApplicationListState extends State<ApplicationList> {
   List<AppInfo> applications = [];
   List<String> appNames = [];
-  ConnectionState state = ConnectionState.done;
+  ConnectionState state = ConnectionState.active;
 
   bool abc = true;
   TextEditingController searchApp = TextEditingController();
 
   _getApps() {
     setState(() {
-      appNames = ApplicationsManager.allApps.map((e) => e.name!).toList();
-      applications = ApplicationsManager.allApps;
+      appNames = ApplicationsManager().allApps.map((e) => e.name!).toList();
+      applications = ApplicationsManager().allApps;
+      state = ConnectionState.done;
     });
   }
 
@@ -59,7 +60,8 @@ class _ApplicationListState extends State<ApplicationList> {
 
   @override
   Widget build(BuildContext context) {
-    _sortList();
+    if (state == ConnectionState.done) _sortList();
+
     return Container(
       color: Colors.black,
       child: state == ConnectionState.done
@@ -75,7 +77,7 @@ class _ApplicationListState extends State<ApplicationList> {
 
     if (text.length == 0) {
       setState(() {
-        applications = ApplicationsManager.allApps;
+        applications = ApplicationsManager().allApps;
       });
     }
     List<AppInfo> tempApps = [];
@@ -83,13 +85,13 @@ class _ApplicationListState extends State<ApplicationList> {
       String app = appName.toLowerCase();
       if (app.contains(text)) {
         int index = 0;
-        for (AppInfo application in ApplicationsManager.allApps) {
+        for (AppInfo application in ApplicationsManager().allApps) {
           if (application.name!.toLowerCase() == app) {
             break;
           }
           index++;
         }
-        tempApps.add(ApplicationsManager.allApps[index]);
+        tempApps.add(ApplicationsManager().allApps[index]);
       }
     }
     setState(() {
@@ -105,18 +107,18 @@ class _ApplicationListState extends State<ApplicationList> {
         List<String?> appPackageNames =
             appinfo.map((e) => e.packageName).toList();
         List<String?> allAppsPackageNames =
-            ApplicationsManager.allApps.map((e) => e.packageName).toList();
+            ApplicationsManager().allApps.map((e) => e.packageName).toList();
 
         bool appListChanged = false;
         int i = 0;
 
-        if (appinfo.length != ApplicationsManager.allApps.length) {
+        if (appinfo.length != ApplicationsManager().allApps.length) {
           appListChanged = true;
         }
         if (!appListChanged) {
           for (AppInfo app in appinfo) {
             bool tempAppChange = true;
-            for (AppInfo app2 in ApplicationsManager.allApps) {
+            for (AppInfo app2 in ApplicationsManager().allApps) {
               if (app2.packageName == app.packageName) {
                 tempAppChange = false;
               }
@@ -154,7 +156,7 @@ class _ApplicationListState extends State<ApplicationList> {
               temporaryApps.add(await InstalledApps.getAppInfo(package));
             }
 
-            ApplicationsManager.allApps.addAll(temporaryApps);
+            ApplicationsManager().allApps.addAll(temporaryApps);
 
             if (temporaryApps.isNotEmpty) {
               SharedPreferences.getInstance().then((value) async {
@@ -170,15 +172,15 @@ class _ApplicationListState extends State<ApplicationList> {
               int index = 0;
               bool found = false;
               int i = 0;
-              while (i < ApplicationsManager.allApps.length) {
-                AppInfo app = ApplicationsManager.allApps[i];
+              while (i < ApplicationsManager().allApps.length) {
+                AppInfo app = ApplicationsManager().allApps[i];
                 if (app.packageName == package) {
                   break;
                 }
                 i++;
               }
-              ApplicationsManager.allApps.removeAt(i);
-              print(ApplicationsManager.allApps[i].name);
+              ApplicationsManager().allApps.removeAt(i);
+              print(ApplicationsManager().allApps[i].name);
             }
             SharedPreferences.getInstance().then((value) async {
               value.setInt("startIndex", 1);

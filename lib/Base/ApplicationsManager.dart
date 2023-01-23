@@ -9,8 +9,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApplicationsManager {
-  static List<AppInfo> allApps = [];
+  List<AppInfo> allApps = [];
   late SharedPreferences sh;
+
+  static final ApplicationsManager _singleton = ApplicationsManager._internal();
+
+  factory ApplicationsManager() {
+    return _singleton;
+  }
+
+  ApplicationsManager._internal();
 
   start() async {
     await _getSharedPreferencesApplications();
@@ -22,7 +30,7 @@ class ApplicationsManager {
     Directory path = await getApplicationSupportDirectory();
 
     File? _applications =
-        await File.fromUri(Uri.file("${path.path}/applications.xml"));
+        File.fromUri(Uri.file("${path.path}/applications.xml"));
 
     if (_applications.existsSync() &&
         _applications.readAsStringSync().isNotEmpty) {
@@ -38,9 +46,9 @@ class ApplicationsManager {
         AppInfo appInfo = AppInfo(
           e["name"],
           e["icon"],
-          e["package_name"],
-          e["version_name"],
-          e["version_code"],
+          e["packageName"],
+          e["versioName"],
+          e["versionCode"],
         );
         return appInfo;
       }).toList();
@@ -49,13 +57,13 @@ class ApplicationsManager {
     } else {
       print("daub");
 
-      getApplications();
+      await getApplications();
     }
   }
 
   Future<List<AppInfo>> getApplications() async {
     allApps = await InstalledApps.getInstalledApps(true, true);
-    saveApplicationsToSharedPreferences();
+    await saveApplicationsToSharedPreferences();
     return allApps;
   }
 
@@ -79,15 +87,14 @@ class ApplicationsManager {
     _applications.writeAsString(applicationsString);
   }
 
-  Map<String,dynamic> appToMap(AppInfo app){
+  Map<String, dynamic> appToMap(AppInfo app) {
     return {
       "name": app.name,
       "icon": base64.encode(app.icon!),
       "packageName": app.packageName,
       "versionName": app.versionName,
       "versionCode": app.versionCode,
-  };
-
+    };
 
     /*
     String? name;

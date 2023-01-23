@@ -60,7 +60,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    applicationsManager.getApplications();
+    //applicationsManager.getApplications();
+
     _animateToPage();
 
     return Scaffold(
