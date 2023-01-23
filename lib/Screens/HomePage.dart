@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:battery_plus/battery_plus.dart';
 import 'package:clean_launcher/Base/TaskBase.dart';
@@ -35,6 +36,9 @@ class _HomePageState extends State<HomePage> {
       localTasks = tasksManager.allTasks;
     });
   }
+
+  
+
 
   _getNextTask() {
     localTasks.sort((a, b) {
@@ -200,6 +204,23 @@ class _HomePageState extends State<HomePage> {
                   ),
                 )
               : Container(),
+              SizedBox(height: 16,),
+
+          Container(
+                  padding: EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Text(
+                    "\"${_getMotivationalPhrases()[Random().nextInt(_getMotivationalPhrases().length-1)]}\"",
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                    ),
+                  ),
+                )
+          ,
           SizedBox(
             height: 36,
           ),
@@ -281,5 +302,38 @@ class _HomePageState extends State<HomePage> {
     } else {
       return Icon(Icons.battery_0_bar);
     }
+  }
+
+  _getMotivationalPhrases(){
+    List<String> frasesMotivacionais = [
+  "O fracasso é apenas um passo para o sucesso.",
+  "Se você acredita em si mesmo, pode conquistar qualquer coisa.",
+  "Trabalho duro leva a realizações incríveis.",
+  "Não importa a velocidade a qual você vai, desde que você não pare.",
+  "Se você estiver comprometido, você pode conquistar tudo o que deseja.",
+  "O sucesso é a soma de pequenos esforços repetidos diariamente.",
+  "O trabalho duro supera o talento quando o talento não trabalha duro.",
+  "Mantenha seus olhos no prêmio e seus pés no chão.",
+  "O sucesso é uma escada, não um destino.",
+  "A disciplina é a chave para o sucesso.",
+  "A falha é a oportunidade de começar de novo com mais inteligência.",
+  "Só podemos falhar se deixarmos de tentar.",
+  "Não importa o quão difíceis as coisas pareçam agora, elas sempre melhoram com o tempo.",
+  "Cada fracasso é uma lição valiosa para o sucesso futuro.",
+  "O sucesso não é a chave para a felicidade. A felicidade é a chave para o sucesso.",
+  "Se você desistir agora, jamais saberá o que poderia ter alcançado.",
+  "Não importa o quão longe você esteja do seu objetivo, sempre haverá algo a ser feito.",
+  "O sucesso é um jogo de números. Quanto mais você joga, mais chances tem de vencer.",
+  "A única maneira de falhar é desistir.",
+  "Todos nós cometemos erros. O importante é aprender com eles e seguir em frente.",
+  "O sucesso é construído sobre a persistência e a determinação.",
+  "Não importa quão ruim seja uma situação, sempre há uma saída.",
+  "A disciplina é a ponte entre objetivos e realizações.",
+  "A mudança é difícil no início, desagradável no meio, mas maravilhosa no fim.",
+  "O sucesso é 90% transpiração e 10% inspiração.",
+  "As pessoas bem-sucedidas não têm medo de tentar coisas novas.",
+  "O sucesso é uma jornada, não um destino."
+  ];
+  return frasesMotivacionais;
   }
 }

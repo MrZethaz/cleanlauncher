@@ -70,12 +70,31 @@ class ApplicationsManager {
     }
 
     List<Map<String, dynamic>> applicationsMap =
-        allApps.map((e) => e.toMap()).toList();
+        allApps.map((e) => appToMap(e)).toList() as List<Map<String, dynamic>>;
 
     List<String> jsonListString =
         applicationsMap.map((e) => jsonEncode(e)).toList();
     String applicationsString = jsonEncode(jsonListString);
 
     _applications.writeAsString(applicationsString);
+  }
+
+  Map<String,dynamic> appToMap(AppInfo app){
+    return {
+      "name": app.name,
+      "icon": base64.encode(app.icon!),
+      "packageName": app.packageName,
+      "versionName": app.versionName,
+      "versionCode": app.versionCode,
+  };
+
+
+    /*
+    String? name;
+  Uint8List? icon;
+  String? packageName;
+  String? versionName;
+  int? versionCode;
+     */
   }
 }
