@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                 style: GoogleFonts.montserrat(
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
-                  fontSize: 16,
+                  fontSize: 18,
                 ),
               ),
             ),
