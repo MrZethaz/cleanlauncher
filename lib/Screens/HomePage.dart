@@ -8,6 +8,7 @@ import 'package:clean_launcher/Screens/NotesList.dart';
 import 'package:clean_launcher/Screens/TaskList.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:installed_apps/installed_apps.dart';
 import 'package:intl/intl.dart';
 
 TaskManager tasksManager = TaskManager();
@@ -29,6 +30,8 @@ class _HomePageState extends State<HomePage> {
 
   List<TaskBase> localTasks = [];
   TaskBase? nextTask;
+
+  String firstMotivationalMessage = "";
   _getTasks() async {
     await tasksManager.start();
     await tasksManager.getSharedPreferencesTasks();
@@ -36,9 +39,6 @@ class _HomePageState extends State<HomePage> {
       localTasks = tasksManager.allTasks;
     });
   }
-
-  
-
 
   _getNextTask() {
     localTasks.sort((a, b) {
@@ -77,6 +77,8 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     _getTasks();
+    firstMotivationalMessage = _getMotivationalPhrases()[
+        Random().nextInt(_getMotivationalPhrases().length - 1)];
   }
 
   @override
@@ -204,82 +206,121 @@ class _HomePageState extends State<HomePage> {
                   ),
                 )
               : Container(),
-              SizedBox(height: 16,),
-
-          Container(
-                  padding: EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Text(
-                    "\"${_getMotivationalPhrases()[Random().nextInt(_getMotivationalPhrases().length-1)]}\"",
-                    style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 22,
-                    ),
-                  ),
-                )
-          ,
-          SizedBox(
-            height: 36,
-          ),
-          GestureDetector(
-            child: Container(
-                width: 200,
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(32)),
-                child: Center(
-                  child: Text(
-                    "Notes",
-                    style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                )),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return NotesList();
-                },
-              ));
-            },
-          ),
           SizedBox(
             height: 16,
           ),
-          GestureDetector(
-            child: Container(
-                width: 200,
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(32)),
-                child: Center(
-                  child: Text(
-                    "Daily tasks",
-                    style: GoogleFonts.montserrat(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                )),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return TaskList();
-                },
-              ));
-            },
+          Container(
+            padding: EdgeInsets.all(24),
+            margin: EdgeInsets.symmetric(horizontal: 48),
+            decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12)),
+            child: Center(
+              child: Text(
+                "\"${firstMotivationalMessage.length >= 120 ? firstMotivationalMessage.substring(0, 120) : firstMotivationalMessage}\"",
+                style: GoogleFonts.montserrat(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ),
+          SizedBox(
+            height: 36,
+          ),
+          _getNotesButton(),
+          SizedBox(
+            height: 16,
+          ),
+          _getDailyTasksButton(),
+          SizedBox(
+            height: 16,
+          ),
+          _getSpotifyButton(),
           Expanded(child: Container()),
         ]),
       ),
+    );
+  }
+
+  _getSpotifyButton() {
+    return GestureDetector(
+      child: Container(
+          width: 200,
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(32)),
+          child: Center(
+            child: Text(
+              "Spotify xD",
+              style: GoogleFonts.montserrat(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          )),
+      onTap: () {
+        InstalledApps.startApp("com.spotify.music");
+      },
+    );
+  }
+
+  _getDailyTasksButton() {
+    return GestureDetector(
+      child: Container(
+          width: 200,
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(32)),
+          child: Center(
+            child: Text(
+              "Daily tasks",
+              style: GoogleFonts.montserrat(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          )),
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return TaskList();
+          },
+        ));
+      },
+    );
+  }
+
+  _getNotesButton() {
+    return GestureDetector(
+      child: Container(
+          width: 200,
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(32)),
+          child: Center(
+            child: Text(
+              "Notes",
+              style: GoogleFonts.montserrat(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          )),
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return NotesList();
+          },
+        ));
+      },
     );
   }
 
@@ -304,36 +345,36 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  _getMotivationalPhrases(){
+  _getMotivationalPhrases() {
     List<String> frasesMotivacionais = [
-  "O fracasso é apenas um passo para o sucesso.",
-  "Se você acredita em si mesmo, pode conquistar qualquer coisa.",
-  "Trabalho duro leva a realizações incríveis.",
-  "Não importa a velocidade a qual você vai, desde que você não pare.",
-  "Se você estiver comprometido, você pode conquistar tudo o que deseja.",
-  "O sucesso é a soma de pequenos esforços repetidos diariamente.",
-  "O trabalho duro supera o talento quando o talento não trabalha duro.",
-  "Mantenha seus olhos no prêmio e seus pés no chão.",
-  "O sucesso é uma escada, não um destino.",
-  "A disciplina é a chave para o sucesso.",
-  "A falha é a oportunidade de começar de novo com mais inteligência.",
-  "Só podemos falhar se deixarmos de tentar.",
-  "Não importa o quão difíceis as coisas pareçam agora, elas sempre melhoram com o tempo.",
-  "Cada fracasso é uma lição valiosa para o sucesso futuro.",
-  "O sucesso não é a chave para a felicidade. A felicidade é a chave para o sucesso.",
-  "Se você desistir agora, jamais saberá o que poderia ter alcançado.",
-  "Não importa o quão longe você esteja do seu objetivo, sempre haverá algo a ser feito.",
-  "O sucesso é um jogo de números. Quanto mais você joga, mais chances tem de vencer.",
-  "A única maneira de falhar é desistir.",
-  "Todos nós cometemos erros. O importante é aprender com eles e seguir em frente.",
-  "O sucesso é construído sobre a persistência e a determinação.",
-  "Não importa quão ruim seja uma situação, sempre há uma saída.",
-  "A disciplina é a ponte entre objetivos e realizações.",
-  "A mudança é difícil no início, desagradável no meio, mas maravilhosa no fim.",
-  "O sucesso é 90% transpiração e 10% inspiração.",
-  "As pessoas bem-sucedidas não têm medo de tentar coisas novas.",
-  "O sucesso é uma jornada, não um destino."
-  ];
-  return frasesMotivacionais;
+      "O fracasso é apenas um passo para o sucesso.",
+      "Se você acredita em si mesmo, pode conquistar qualquer coisa.",
+      "Trabalho duro leva a realizações incríveis.",
+      "Não importa a velocidade a qual você vai, desde que você não pare.",
+      "Se você estiver comprometido, você pode conquistar tudo o que deseja.",
+      "O sucesso é a soma de pequenos esforços repetidos diariamente.",
+      "O trabalho duro supera o talento quando o talento não trabalha duro.",
+      "Mantenha seus olhos no prêmio e seus pés no chão.",
+      "O sucesso é uma escada, não um destino.",
+      "A disciplina é a chave para o sucesso.",
+      "A falha é a oportunidade de começar de novo com mais inteligência.",
+      "Só podemos falhar se deixarmos de tentar.",
+      "Não importa o quão difíceis as coisas pareçam agora, elas sempre melhoram com o tempo.",
+      "Cada fracasso é uma lição valiosa para o sucesso futuro.",
+      "O sucesso não é a chave para a felicidade. A felicidade é a chave para o sucesso.",
+      "Se você desistir agora, jamais saberá o que poderia ter alcançado.",
+      "Não importa o quão longe você esteja do seu objetivo, sempre haverá algo a ser feito.",
+      "O sucesso é um jogo de números. Quanto mais você joga, mais chances tem de vencer.",
+      "A única maneira de falhar é desistir.",
+      "Todos nós cometemos erros. O importante é aprender com eles e seguir em frente.",
+      "O sucesso é construído sobre a persistência e a determinação.",
+      "Não importa quão ruim seja uma situação, sempre há uma saída.",
+      "A disciplina é a ponte entre objetivos e realizações.",
+      "A mudança é difícil no início, desagradável no meio, mas maravilhosa no fim.",
+      "O sucesso é 90% transpiração e 10% inspiração.",
+      "As pessoas bem-sucedidas não têm medo de tentar coisas novas.",
+      "O sucesso é uma jornada, não um destino."
+    ];
+    return frasesMotivacionais;
   }
 }
