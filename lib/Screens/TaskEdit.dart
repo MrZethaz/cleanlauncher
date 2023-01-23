@@ -58,7 +58,7 @@ class _TasksEditState extends State<TasksEdit> {
         child: Ink(
           padding: EdgeInsets.all(24),
           child: Text(
-            "Horário: ${this.time.hour}:${this.time.minute}",
+            "Horário: ${widget.task == null ? this.time.hour : widget.task!.time.hour}:${widget.task == null ? this.time.minute : widget.task!.time.minute}",
             style: GoogleFonts.montserrat(
                 fontSize: 28, color: Colors.black, fontWeight: FontWeight.bold),
           ),
