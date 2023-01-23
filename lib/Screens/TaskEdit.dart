@@ -48,7 +48,7 @@ class _TasksEditState extends State<TasksEdit> {
   _getContentTextField() {
     int hour = time.hour;
     int minute = time.minute;
-    NumberFormat nf = new NumberFormat("00");
+    NumberFormat nf = NumberFormat("00");
     return Center(
       child: InkWell(
         onTap: () async {

@@ -122,10 +122,13 @@ class _TaskListState extends State<TaskList> {
   }
 
   _getListTile(int index) {
+    NumberFormat nf = NumberFormat("00");
+    int hour = tasksManager.allTasks[index].time.hour;
+    int minute = tasksManager.allTasks[index].time.minute;
     return ListTile(
       title: Text(tasksManager.allTasks[index].title),
-      subtitle: Text(
-          "Hora de execução: ${tasksManager.allTasks[index].time.hour}:${tasksManager.allTasks[index].time.minute}"),
+      subtitle:
+          Text("Hora de execução: ${nf.format(hour)}:${nf.format(minute)}"),
       onTap: () async {
         var result = await Navigator.push(context, MaterialPageRoute(
           builder: (context) {
