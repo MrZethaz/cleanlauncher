@@ -1,6 +1,7 @@
 import 'package:clean_launcher/Base/TaskBase.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class TasksEdit extends StatefulWidget {
   TaskBase? task;
@@ -21,6 +22,7 @@ class _TasksEditState extends State<TasksEdit> {
     super.initState();
     if (widget.task != null) {
       _titleEditingController.text = widget.task!.title;
+      time = widget.task!.time;
     }
   }
 
@@ -44,6 +46,9 @@ class _TasksEditState extends State<TasksEdit> {
   }
 
   _getContentTextField() {
+    int hour = time.hour;
+    int minute = time.minute;
+    NumberFormat nf = new NumberFormat("00");
     return Center(
       child: InkWell(
         onTap: () async {
@@ -58,7 +63,7 @@ class _TasksEditState extends State<TasksEdit> {
         child: Ink(
           padding: EdgeInsets.all(24),
           child: Text(
-            "Horário: ${widget.task == null ? this.time.hour : widget.task!.time.hour}:${widget.task == null ? this.time.minute : widget.task!.time.minute}",
+            "Horário: ${nf.format(hour)}:${nf.format(minute)}",
             style: GoogleFonts.montserrat(
                 fontSize: 28, color: Colors.black, fontWeight: FontWeight.bold),
           ),
